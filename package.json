@@ -1,18 +1,18 @@
 {
-  "name": "pronote-api",
-  "version": "1.2.0",
-  "description": "Pronote 2020 API",
+  "name": "pronote-lib",
+  "version": "1.0.0",
+  "description": "Pronote library",
   "main": "index.js",
-  "scripts": {
-    "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "keywords": [
-    "pronote",
-    "api"
+    "pronote"
   ],
-  "author": "Adrien 'Litarvan' Navratil <adrien1975@live.Fr>",
+  "author": "Adrien 'Litarvan' Navratil <adrien1975@live.fr> (https://github.com/Litarvan/pronote-api)",
+  "contributors": [
+    "wow <wow@wowow.cloud>"
+  ],
   "license": "GPL-3.0",
+  "repository": "github:wow0000/pronote-api",
+  "homepage": "https://github.com/wow0000/pronote-api/",
   "dependencies": {
     "axios": "^0.18.1",
     "jsdom": "^11.7.0",
