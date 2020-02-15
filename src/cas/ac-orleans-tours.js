@@ -3,7 +3,6 @@ const util = require('../util');
 
 async function login({ username, password, url })
 {
-    console.log(`Logging in '${username}' for '${url}' using Orleans-Tours CAS`);
 
     let jar = new jsdom.CookieJar();
     let dom = await util.getDOM({
@@ -29,16 +28,13 @@ async function login({ username, password, url })
     });
 
     if (!dom.window.document.querySelector('input[name=SAMLResponse]')) {
-        console.log(`Wrong IDs for '${username}'`);
-        throw 'Mauvais identifiants';
+        throw 'bad login';
     }
 
     await util.submitForm({
         dom,
         jar
     });
-
-    console.log(`Logged in '${username}'`);
 
     return util.extractStart(await util.getDOM({
         url,

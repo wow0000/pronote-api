@@ -81,11 +81,8 @@ function tryExtractStart(username, html)
 {
     if (html.indexOf('PRONOTE') === -1)
     {
-        console.log(`Wrong IDs for '${username}'`);
-        throw 'Mauvais Identifiants';
+        throw 'bad login';
     }
-
-    console.log(`Logged in '${username}'`);
 
     return extractStart(html);
 }

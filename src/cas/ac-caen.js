@@ -5,7 +5,6 @@ const util = require('../util');
 
 async function login({ username, password, url })
 {
-    console.log(`Logging in '${username}' for '${url}' using Rouen CAS`);
 
     let jar = new jsdom.CookieJar();
 

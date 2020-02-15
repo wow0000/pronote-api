@@ -181,7 +181,6 @@ async function login({ username, password, url, cas })
         G: auth.donnees.ressource.G
     };
 
-    console.log(`Successfully logged user '${realUsername}' in ${(new Date().getTime() - time) / 1000}s`);
     sessions[realUsername] = { auth, session };
 
     return {
@@ -429,7 +428,6 @@ async function fetch({ username, password, url, cas })
     {
     }
 
-    console.log(`Successfully fetched user '${username}' in ${(new Date().getTime() - time) / 1000}s`);
     return result;
 }
 
@@ -822,8 +820,8 @@ async function init({ username, password, url, cas })
       });
     }
     catch(err) {
-      console.error(err);
-      throw `Unknown CAS '${cas}'`;
+        throw(err);
+        throw `Unknown CAS '${cas}'`;
     }
 }
 

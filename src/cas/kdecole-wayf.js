@@ -5,7 +5,6 @@ const util = require('../util');
 
 async function login({ username, password, url, acName, casUrl, idp, atenURL })
 {
-    console.log(`Logging in '${username}' for '${url}' using ${acName} CAS`);
 
     let jar = new jsdom.CookieJar();
     let dom = await util.getDOM({
