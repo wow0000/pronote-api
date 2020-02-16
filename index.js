@@ -14,4 +14,5 @@ function fetch(username, password, url, cas) {
 
 module.exports = {
     fetch,
+    pronote,
 };

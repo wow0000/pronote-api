@@ -1,23 +1,25 @@
 {
   "name": "pronote-lib",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Pronote library",
   "main": "index.js",
   "keywords": [
-    "pronote"
+    "pronote",
+    "library",
+    "educationnal"
   ],
   "author": "Adrien 'Litarvan' Navratil <adrien1975@live.fr> (https://github.com/Litarvan/pronote-api)",
   "contributors": [
     "wow <wow@wowow.cloud>"
   ],
   "license": "GPL-3.0",
-  "repository": "github:wow0000/pronote-api",
-  "homepage": "https://github.com/wow0000/pronote-api/",
+  "repository": "github:wow0000/pronote-lib",
+  "homepage": "https://github.com/wow0000/pronote-lib/",
   "dependencies": {
     "axios": "^0.18.1",
-    "jsdom": "^11.7.0",
+    "jsdom": "^11.12.0",
     "node-forge": "0.6.33",
-    "pako": "^1.0.6",
-    "xml2js": "^0.4.19"
+    "pako": "^1.0.11",
+    "xml2js": "^0.4.23"
   }
 }
