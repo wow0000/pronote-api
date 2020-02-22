@@ -9,10 +9,9 @@ npm install pronote-lib
 
 ```Javascript
 const pronote = require("pronote-lib");
-//Pronote is a object with 2 functions, "fetch" and "pronote" where pronote is the raw api from Litarvan.
 
-let url = "http://xxx.com/pronote/";
-let cas = "ac-lyon";
+let url = "http://xyz.com/pronote/";
+let cas = "ac-lyon"; //Use none bypass CAS auth.
 
 pronote.fetch(username, password, url, cas).then(function(res){
     console.log(res);
