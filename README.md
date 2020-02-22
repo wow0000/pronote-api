@@ -17,9 +17,39 @@ let cas = "ac-lyon";
 pronote.fetch(username, password, url, cas).then(function(res){
     console.log(res);
 });
+
+pronote.geo("48.8666", "2.3333").then(function (res) {
+	console.log(res)
+    /*
+    [
+      {
+        url: 'https://0911028Y.index-education.net/pronote',
+        nomEtab: 'COLLEGE BUISSON',
+        lat: '48.689780677',
+        long: '2.378403720',
+        cp: '91260'
+      },
+      {
+        url: 'https://0911029Z.index-education.net/pronote',
+        nomEtab: 'COLLEGE PICASSO\r\n',
+        lat: '48.690822079',
+        long: '2.279716714',
+        cp: '91160'
+      },
+      {
+        url: 'https://0910715H.index-education.net/pronote',
+        nomEtab: 'LYCEE PROF. JEAN PERRIN',
+        lat: '48.691235348',
+        long: '2.301254789',
+        cp: '91163'
+      },
+    */
+}).catch(function (err) {
+	console.log(err)
+})
+
 ``` 
 La requête fetch renvoie un JSON avec toutes les informations reçues : [**Exemple de sortie de l'application**](https://gist.github.com/Litarvan/ec666fa544f6d036e515867d0f266ca7)
-
 
 ## Quels sont les avantages à l'api originel ?
 - Les console.log ont été retiré pour permettre une utilisation également en mode CLI
