@@ -225,6 +225,7 @@ class User {
 	 * @return {Promise<object>}
 	 */
 	get_menu(date) {
+		if (!this.islogged) throw "Not logged in";
 		let pointer_this = this;
 		return new Promise(async function (resolve, reject) {
 			let {auth, session} = pointer_this.session;
@@ -264,6 +265,7 @@ class User {
 	}
 
 	get_profile_pic() {
+		if (!this.islogged) throw "Not logged in";
 		let pointer_this = this;
 		return new Promise(async function (resolve, reject) {
 
@@ -289,6 +291,7 @@ class User {
 	 * @return {Promise<array>}
 	 */
 	get_informations(since = 3) {
+		if (!this.islogged) throw "Not logged in";
 		let pointer_this = this;
 		return new Promise(async function (resolve, reject) {
 
@@ -338,6 +341,42 @@ class User {
 				return 0;
 			});
 			resolve(result);
+		})
+	}
+
+	get_homework(weekShift = 9) {
+		if (!this.islogged) throw "Not logged in";
+		let pointer_this = this;
+		return new Promise(async function (resolve, reject) {
+			let {auth, session} = pointer_this.session;
+
+			auth = auth.donnees;
+			let key = /*user.Cle[0]._*/auth.cle;
+
+			cipher.updateKey(session, key);
+
+
+			let tt = await timetable(session, auth.ressource);
+
+			if (new Date().getMonth() < 8) {
+				weekShift = 17;
+			}
+
+			let first = new Date(tt[0].time).getWeek() + weekShift;
+			let second = new Date(tt[1].time).getWeek() + weekShift;
+
+			if (first > 44) {
+				first -= 44;
+			}
+			if (second > 44) {
+				second -= 44;
+			}
+
+			if (!auth.listeOngletsInvisibles.includes(88)) {
+				resolve((await homeworks(pointer_this.url, session, first)).concat(await homeworks(pointer_this.url, session, second)));
+			}
+
+			reject({status: false, description: "no homework found"})
 		})
 	}
 
