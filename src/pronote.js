@@ -380,6 +380,56 @@ class User {
 		})
 	}
 
+	get_absences() {
+		if (!this.islogged) throw "Not logged in";
+		let pointer_this = this;
+		return new Promise(async function (resolve, reject) {
+			let {auth, session} = pointer_this.session;
+
+			auth = auth.donnees;
+			let key = /*user.Cle[0]._*/auth.cle;
+
+			cipher.updateKey(session, key);
+
+			let result = [];
+			const periods = session.periods;
+			let this_year = new Date().getFullYear();
+
+			for (const period of periods) {
+				if (!period.period) {
+					continue;
+				}
+
+				const absences = await navigate(session, 19, 'PagePresence', {
+					DateDebut: {
+						_T: 7,
+						V: `1/9/${this_year - 1} 0:0:0`
+					},
+					DateFin: {
+						_T: 7,
+						V: `10/7/${this_year + 1} 0:0:0`
+					},
+					periode: {
+						N: period.N,
+						G: 1,
+						L: period.name
+					}
+				});
+
+				result.push({
+					period: period.id,
+					absences: absences.donnees.listeAbsences.V.map(absence => ({
+						from: util.parseDate((absence.dateDebut || absence.date || absence.dateDemande).V),
+						to: util.parseDate((absence.dateFin || absence.date || absence.dateDemande).V),
+						solved: absence.reglee,
+						justified: absence.justifie,
+						reason: absence.listeMotifs && absence.listeMotifs.V.length > 0 ? absence.listeMotifs.V[0].L : ''
+					}))
+				});
+				resolve(result)
+			}
+		});
+	}
 
 }
 
