@@ -35,6 +35,7 @@ function geo(lat, long) {
 		}
 
 		let incomingData = "";
+		let https = require("https")
 		const request = https.request(options, function (resp) {
 			resp.on('data', function (data) {
 				incomingData += data;
