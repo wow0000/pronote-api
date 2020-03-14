@@ -1,6 +1,6 @@
 {
   "name": "pronote-lib",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "Pronote library",
   "main": "index.js",
   "keywords": [
@@ -12,7 +12,7 @@
   "contributors": [
     "wow <wow@wowow.cloud>"
   ],
-  "license": "GPL-3.0",
+  "license": "MIT",
   "repository": "github:wow0000/pronote-lib",
   "homepage": "https://github.com/wow0000/pronote-lib/",
   "dependencies": {

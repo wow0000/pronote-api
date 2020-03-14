@@ -170,7 +170,177 @@ async function login({username, password, url, cas}) {
 
 	return {
 		success: true,
+		session: sessions[realUsername]
 	};
+}
+
+//wowow - 2020
+
+class User {
+	/**
+	 * @param {string} username
+	 * @param {string} password
+	 * @param {string} url
+	 * @param {string} cas
+	 * @param {function} [callback] - Callback to call after login, !true = error
+	 * @param {boolean} [auto_login=true] - Auto login after creating the class, default = true
+	 */
+	constructor({username, password, url, cas}, callback = function () {
+	}, auto_login = true) {
+		//check if data is provided.
+		if (!username || !password || !url) {
+			throw new Error('Bad request');
+		}
+
+		//Save them for the login function
+		this.details = {
+			username,
+			password,
+			url,
+			cas
+		}
+
+		this.islogged = false;
+		this.session = undefined;
+
+
+		if (auto_login) {
+			//Because this is replace in the promise, we need to store the pointer in a variable to overcome this.
+			let pointer_this = this;
+
+			login({username, password, url, cas}).then(function (res) {
+				if (res.success) {
+					pointer_this.session = res.session;
+					pointer_this.islogged = true;
+					callback(true); // Call callback after finishing the login.
+				}
+			}).catch(function (err) {
+				callback(err);
+			})
+		}
+	}
+
+	/**
+	 * @param {Date} date
+	 * @return {Promise<object>}
+	 */
+	get_menu(date) {
+		let pointer_this = this;
+		return new Promise(async function (resolve, reject) {
+			let {auth, session} = pointer_this.session;
+
+			auth = auth.donnees;
+			let key = /*user.Cle[0]._*/auth.cle;
+
+			cipher.updateKey(session, key);
+
+			let home = await navigate(session, 7, 'PageAccueil', {
+				menuDeLaCantine: {
+					date: {
+						_T: 7,
+						V: `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()} 0:0:0`
+					}
+				}
+			});
+
+			let result = [];
+			if (home.donnees.menuDeLaCantine) {
+				const menu = home.donnees.menuDeLaCantine.listeRepas.V;
+				if (menu.length > 0) {
+					const content = menu[0].listePlats.V;
+					for (let entry of content) {
+						const food = entry.listeAliments.V;
+						const foods = [];
+
+						for (let f of food) {
+							foods.push(f.L);
+						}
+						result.push(foods);
+					}
+				}
+			}
+			resolve(result);
+		})
+	}
+
+	get_profile_pic() {
+		let pointer_this = this;
+		return new Promise(async function (resolve, reject) {
+
+			let {auth, session} = pointer_this.session;
+			auth = auth.donnees;
+			let key = /*user.Cle[0]._*/auth.cle;
+			cipher.updateKey(session, key); //idk what this is but seems kind of required.
+
+			try {
+				resolve(Buffer.from(await request.http({
+					url: file(pointer_this.details.url, session, 'photo.jpg', auth.ressource),
+					binary: true
+				}), 'binary').toString('base64'));
+
+			} catch (err) {
+				reject({status: false, error: err})
+			}
+		})
+	}
+
+	/**
+	 * @param since Number of month.
+	 * @return {Promise<array>}
+	 */
+	get_informations(since = 3) {
+		let pointer_this = this;
+		return new Promise(async function (resolve, reject) {
+
+			let {auth, session} = pointer_this.session;
+			auth = auth.donnees;
+			let key = /*user.Cle[0]._*/auth.cle;
+			cipher.updateKey(session, key); //idk what this is but seems kind of required.
+
+			const infos = (await navigate(session, 8, 'PageActualites', {
+				estAuteur: false
+			})).donnees.listeActualites.V;
+
+			const date = new Date();
+			date.setMonth(date.getMonth() - since);
+
+			const maxDate = date.getTime();
+
+			let result = []
+
+			for (const info of infos) {
+				const date = util.parseDate(info.dateDebut.V);
+				if (maxDate > date) {
+					continue;
+				}
+
+				result.push({
+					time: date,
+					title: info.L,
+					teacher: info.elmauteur.V.L,
+					content: info.listeQuestions.V[0].texte.V,
+					files: info.listeQuestions.V[0].listePiecesJointes.V.map(f => file(pointer_this.details.url, session, f.L, {
+						N: f.N,
+						G: 50
+					}))
+				});
+			}
+
+			result.sort((a, b) => {
+				if (a.time < b.time) {
+					return 1
+				}
+
+				if (a.time > b.time) {
+					return -1;
+				}
+
+				return 0;
+			});
+			resolve(result);
+		})
+	}
+
 }
 
 async function fetch({username, password, url, cas}) {
@@ -763,4 +933,4 @@ async function init({username, password, url, cas}) {
 	}
 }
 
-module.exports = {login, fetch};
+module.exports = {login, fetch, User};

@@ -57,4 +57,5 @@ module.exports = {
 	fetch,
 	geo,
 	pronote,
+	User: pronote.User
 };
