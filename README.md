@@ -3,6 +3,7 @@
 Original api from Litarvan (https://github.com/Litarvan/pronote-api)
 
 ## Installation
+![npm](https://img.shields.io/npm/v/pronote-lib)
 ```Bash
 npm install pronote-lib
 ```
