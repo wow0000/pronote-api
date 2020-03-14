@@ -2,11 +2,11 @@
 
 Original api from Litarvan (https://github.com/Litarvan/pronote-api)
 
-## Utilisation
+## Installation
 ```Bash
 npm install pronote-lib
 ```
-
+## Utilisation fetch & geo
 ```Javascript
 const pronote = require("pronote-lib");
 
@@ -50,11 +50,44 @@ pronote.geo("48.8666", "2.3333").then(function (res) {
 ``` 
 La requête fetch renvoie un JSON avec toutes les informations reçues : [**Exemple de sortie de l'application**](https://gist.github.com/Litarvan/ec666fa544f6d036e515867d0f266ca7)
 
+## Utilisation classe
+
+```Javascript
+const pronote = require("pronote-lib");
+
+let url = "http://xyz.com/pronote/";
+let cas = "ac-lyon"; //Use none bypass CAS auth.
+
+let user = new pronote.User({username: "xxx.yyy", "password": "****",url,cas}, function(){
+    user.get_marks().then(function(res){
+        console.log(res);
+    }).catch(function(err){
+        console.error(err);   
+    })
+})
+```
+
+#### Methods:
+* constructor({username, password, url, cas}, callback = function () {}, auto_login = true)
+* get_menu(date = new Date())
+* get_profile_pic()
+* get_information(since = 3)
+* get_homework(weekShift = 9)
+* get_absences()
+* get_reports()
+* get_timeplan(date = new Date())
+* get_marks()
+
+Every of theses functions returns a promise.
+
+Functions with "=" arguments is default values.
+
 ## Quels sont les avantages à l'api originel ?
 - Les console.log ont été retiré pour permettre une utilisation également en mode CLI
 - Certains erreurs ont été standardisé par un "bad login" (Uniquement dans la plupart des cas)
 - Facilité d'utilisation grâce a fetch ainsi que NPM
 - Légèrement plus léger grâce au serveur HTTP retiré entièrement, _même en importation de module_.
+- Classe
 
 ## Données renvoyées
 

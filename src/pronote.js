@@ -224,7 +224,7 @@ class User {
 	 * @param {Date} date
 	 * @return {Promise<object>}
 	 */
-	get_menu(date) {
+	get_menu(date = new Date()) {
 		if (!this.islogged) throw "Not logged in";
 		let pointer_this = this;
 		return new Promise(async function (resolve, reject) {
@@ -290,7 +290,7 @@ class User {
 	 * @param since Number of month.
 	 * @return {Promise<array>}
 	 */
-	get_informations(since = 3) {
+	get_information(since = 3) {
 		if (!this.islogged) throw "Not logged in";
 		let pointer_this = this;
 		return new Promise(async function (resolve, reject) {
@@ -431,6 +431,80 @@ class User {
 		});
 	}
 
+	get_reports() {
+		if (!this.islogged) throw "Not logged in";
+		let pointer_this = this;
+		return new Promise(async function (resolve, reject) {
+			let {auth, session} = pointer_this.session;
+
+			auth = auth.donnees;
+			let key = /*user.Cle[0]._*/auth.cle;
+
+			cipher.updateKey(session, key);
+
+			const periods = session.periods;
+			let result = [];
+			for (const period of periods) {
+				if (!period.period) {
+					continue;
+				}
+
+				if (!auth.listeOngletsInvisibles.includes(13)) {
+					result.push({period: period.id, ...(await report(session, auth.ressource, period))});
+				}
+			}
+			resolve(result)
+		});
+	}
+
+	get_timeplan(date = new Date()) {
+		if (!this.islogged) throw "Not logged in";
+		let pointer_this = this;
+		return new Promise(async function (resolve, reject) {
+			let {auth, session} = pointer_this.session;
+
+			auth = auth.donnees;
+			let key = /*user.Cle[0]._*/auth.cle;
+
+			cipher.updateKey(session, key);
+
+			resolve(await timetable(session, auth.ressource, date));
+
+		});
+	}
+
+	get_marks() {
+		if (!this.islogged) throw "Not logged in";
+		let pointer_this = this;
+		return new Promise(async function (resolve, reject) {
+			let {auth, session} = pointer_this.session;
+
+			auth = auth.donnees;
+			let key = /*user.Cle[0]._*/auth.cle;
+
+			cipher.updateKey(session, key);
+
+			const periods = session.periods;
+			let defaultPeriod;
+			let result = [];
+			for (const period of periods) {
+				const res = await marks(session, {
+					N: period.N,
+					G: 2,
+					L: period.name
+				});
+
+				if (res.marks.length > 0) {
+					if (period.period) {
+						defaultPeriod = util.parsePeriod(period.name);
+					}
+
+					result.push({period: period.id, ...res});
+				}
+			}
+			resolve(result);
+		});
+	}
 }
 
 async function fetch({username, password, url, cas}) {
@@ -719,17 +793,17 @@ async function marks(session, period) {
 	return result;
 }
 
-async function timetable(session, user) {
+async function timetable(session, user, date = new Date()) {
 	let weekAmount = 9;
 
-	if (new Date().getMonth() < 8) {
+	if (date.getMonth() < 8) {
 		weekAmount = 17;
 	}
 
 	let weeks = [];
-	let week = new Date().getWeek() + weekAmount;
+	let week = date.getWeek() + weekAmount;
 
-	if (new Date().getDay() === 7) {
+	if (date.getDay() === 7) {
 		week++;
 	}
 
@@ -753,7 +827,7 @@ async function timetable(session, user) {
 				realWeek -= 52;
 			}
 
-			let time = new Date();
+			let time = new Date(date);
 			time.setMonth(0);
 			time.setDate((realWeek - 1) * 7);
 			time.setHours(6); // In case
