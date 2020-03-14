@@ -15,8 +15,8 @@ function fetch(username, password, url, cas) {
 /**
  * Get schools near a location
  * @async
- * @param {float} lat - latitude such as 45.3
- * @param {float} long - longitude
+ * @param {float/string} lat - latitude such as 45.3
+ * @param {float/string} long - longitude
  * @return {object} json
  */
 function geo(lat, long) {
