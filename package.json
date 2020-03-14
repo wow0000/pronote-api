@@ -16,8 +16,8 @@
   "repository": "github:wow0000/pronote-lib",
   "homepage": "https://github.com/wow0000/pronote-lib/",
   "dependencies": {
-    "axios": "^0.18.1",
-    "jsdom": "^11.12.0",
+    "axios": "^0.19.2",
+    "jsdom": "^16.2.1",
     "node-forge": "=0.6.33",
     "pako": "^1.0.11",
     "xml2js": "^0.4.23"
