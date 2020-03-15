@@ -505,6 +505,25 @@ class User {
 			resolve(result);
 		});
 	}
+
+	get_student() {
+		if (!this.islogged) throw "Not logged in";
+		let pointer_this = this;
+		return new Promise(async function (resolve, reject) {
+			let {auth, session} = pointer_this.session;
+
+			auth = auth.donnees;
+			let key = /*user.Cle[0]._*/auth.cle;
+
+			cipher.updateKey(session, key);
+			let result = {
+				name: auth.ressource.L,
+				studentClass: (auth.ressource.classeDEleve ? auth.ressource.classeDEleve.L :
+					auth.ressource.listeRessources[0].classeDEleve.L)
+			}
+			resolve(result);
+		});
+	}
 }
 
 async function fetch({username, password, url, cas}) {
