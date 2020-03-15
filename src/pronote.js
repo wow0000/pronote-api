@@ -887,9 +887,12 @@ async function timetable(session, user, date = new Date()) {
 		});
 
 		timetable.donnees.ListeCours.forEach(lesson => {
-			let from = util.parseDate(lesson.DateDuCours.V);
-
-			let to = new Date(from);
+			try {
+				let from = util.parseDate(lesson.DateDuCours.V);
+				let to = new Date(from);
+			} catch {
+				from = undefined;
+			}
 			to.setHours(to.getHours() + (lesson.duree * 0.25));
 			to = to.getTime();
 
