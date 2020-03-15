@@ -887,14 +887,17 @@ async function timetable(session, user, date = new Date()) {
 		});
 
 		timetable.donnees.ListeCours.forEach(lesson => {
+			let from;
+			let to;
 			try {
-				let from = util.parseDate(lesson.DateDuCours.V);
-				let to = new Date(from);
+				from = util.parseDate(lesson.DateDuCours.V);
+				to = new Date(from);
+				to.setHours(to.getHours() + (lesson.duree * 0.25));
+				to = to.getTime();
 			} catch {
-				from = undefined;
+				let from = undefined;
+				let to = undefined;
 			}
-			to.setHours(to.getHours() + (lesson.duree * 0.25));
-			to = to.getTime();
 
 			let res = {
 				from,
