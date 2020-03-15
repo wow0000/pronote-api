@@ -913,13 +913,17 @@ async function timetable(session, user, date = new Date()) {
 				res.teacher = 'Aucun prof';
 			}
 
-			if (lesson.ListeContenus.V.length > 2) {
-				let room = lesson.ListeContenus.V[lesson.ListeContenus.V.length - 1].L;
+			try {
+				if (lesson.ListeContenus.V.length > 2) {
+					let room = lesson.ListeContenus.V[lesson.ListeContenus.V.length - 1].L;
 
-				if (!room.startsWith('[') && !room.startsWith('<')) {
-					res['room'] = room;
+					if (!room.startsWith('[') && !room.startsWith('<')) {
+						res['room'] = room;
+					}
 				}
+			} catch (e) {
 			}
+
 
 			res['away'] = lesson.Statut === 'Prof. absent' || lesson.Statut === 'Conseil de classe';
 			res['cancelled'] = lesson.Statut === 'Cours annulé';
