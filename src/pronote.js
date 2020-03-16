@@ -344,6 +344,28 @@ class User {
 		})
 	}
 
+	/**
+	 * @param {boolean} show_read
+	 */
+	get_messages(show_read = true) {
+		if (!this.islogged) throw "Not logged in";
+		let pointer_this = this;
+		return new Promise(async function (resolve, reject) {
+
+			let {auth, session} = pointer_this.session;
+			auth = auth.donnees;
+			let key = /*user.Cle[0]._*/auth.cle;
+			cipher.updateKey(session, key); //idk what this is but seems kind of required.
+
+			const infos = (await navigate(session, 8, 'ListeMessagerie', {
+				avecMessage: true,
+				avecLu: show_read
+			})).donnees.listeMessagerie.V;
+
+			resolve(infos);
+		});
+	}
+
 	get_homework(weekShift = 9) {
 		if (!this.islogged) throw "Not logged in";
 		let pointer_this = this;
