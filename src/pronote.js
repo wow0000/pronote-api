@@ -546,6 +546,74 @@ class User {
 			resolve(result);
 		});
 	}
+
+	get_courses_content() {
+		if (!this.islogged) throw "Not logged in";
+		let pointer_this = this;
+		return new Promise(async function (resolve, reject) {
+			let {auth, session} = pointer_this.session;
+
+			auth = auth.donnees;
+			let key = /*user.Cle[0]._*/auth.cle;
+
+			cipher.updateKey(session, key);
+			////////////////////////////////////
+			let result = [];
+
+			//Tips to myself in a few weeks.
+			//Weeks are calculated from the first week of classes. A.K.A. 1 sept.
+			let course_content = await navigate(session, 89, 'PageCahierDeTexte', { //Onglet 89.
+				domaine: {
+					"_T": 8,
+					"V": "[" + 1 + ".." + 62 + "]"
+				}
+			});
+
+			course_content = course_content.donnees.ListeCahierDeTextes.V;
+
+			if (course_content === undefined) {
+				resolve([]); //Prevent empty courses.
+			}
+
+			for (let i = 0; i < course_content.length; i++) {
+				try {
+					let hw = course_content[i];
+					result.push({
+						subject: hw.Matiere.V.L,
+						date: util.parseDate(hw.Date.V),
+						color: hw.CouleurFond,
+						teacher: hw.listeProfesseurs.V.map(f => ({
+							name: f.L
+						})),
+						content: hw.listeContenus.V.map(f => ({
+							title: f.L,
+							description: util.decodeHTML(f.descriptif.V),
+							rawDescription: f.descriptif.V,
+							files: f.ListePieceJointe.V.map(ff => (function (ff) {
+								if (ff.L !== undefined) {
+									return {
+										name: ff.L,
+										url: file(pointer_this.details.url, ff.L, {N: ff.N, G: 48})
+									}
+								} else {
+									return {};
+								}
+							}))
+						}))
+					})
+				} catch (x) {
+					console.log(x)
+				}
+			}
+
+			result.sort((a, b) => {
+				if (a.date < b.date) return -1;
+				if (a.date > b.date) return 1;
+				return 0
+			})
+			resolve(result);
+		});
+	}
 }
 
 async function fetch({username, password, url, cas}) {
@@ -990,6 +1058,7 @@ async function timetable(session, user, date = new Date()) {
 
 	return weeks;
 }
+
 
 async function homeworks(url, session, week) {
 	let result = [];

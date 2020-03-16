@@ -79,6 +79,8 @@ let user = new pronote.User({username: "xxx.yyy", "password": "****",url,cas}, f
 * get_timeplan(date = new Date())
 * get_marks()
 * get_student()
+* get_messages(show_read = true) //This function return raw pronote data
+* get_courses_content()
 
 Every of theses functions returns a promise.
 
