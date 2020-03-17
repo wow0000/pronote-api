@@ -1074,38 +1074,39 @@ async function homeworks(url, session, week) {
 	if (homeworks === undefined) {
 		return [];
 	}
+	try {
+		homeworks.forEach(homework => {
+			let content = homework.descriptif.V;
+			content = content.substring(5, content.length - 6);
 
-	homeworks.forEach(homework => {
-		let content = homework.descriptif.V;
-		content = content.substring(5, content.length - 6);
-
-		result.push({
-			subject: homework.Matiere.V.L,
-			content: util.decodeHTML(content),
-			rawContent: content,
-			since: util.parseDate(homework.DonneLe.V),
-			until: util.parseDate(homework.PourLe.V),
-			toGive: !!homework.avecRendu,
-			color: homework.CouleurFond,
-			files: homework.ListePieceJointe.V.map(f => ({
-				name: f.L,
-				url: file(url, session, f.L, {N: f.N, G: 48})
-			}))
+			result.push({
+				subject: homework.Matiere.V.L,
+				content: util.decodeHTML(content),
+				rawContent: content,
+				since: util.parseDate(homework.DonneLe.V),
+				until: util.parseDate(homework.PourLe.V),
+				toGive: !!homework.avecRendu,
+				color: homework.CouleurFond,
+				files: homework.ListePieceJointe.V.map(f => ({
+					name: f.L,
+					url: file(url, session, f.L, {N: f.N, G: 48})
+				}))
+			});
 		});
-	});
 
-	result.sort((a, b) => {
-		if (a.until < b.until) {
-			return -1
-		}
+		result.sort((a, b) => {
+			if (a.until < b.until) {
+				return -1
+			}
 
-		if (a.until > b.until) {
-			return 1;
-		}
+			if (a.until > b.until) {
+				return 1;
+			}
 
-		return 0;
-	});
-
+			return 0;
+		});
+	} catch (e) {
+	}
 	return result;
 }
 
