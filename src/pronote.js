@@ -590,13 +590,11 @@ class User {
 							description: util.decodeHTML(f.descriptif.V),
 							rawDescription: f.descriptif.V,
 							files: f.ListePieceJointe.V.map(ff => (function (ff) {
-								if (ff.L !== undefined) {
+								if (ff !== undefined) {
 									return {
 										name: ff.L,
 										url: file(pointer_this.details.url, ff.L, {N: ff.N, G: 48})
 									}
-								} else {
-									return {};
 								}
 							}))
 						}))
@@ -1087,6 +1085,7 @@ async function homeworks(url, session, week) {
 			since: util.parseDate(homework.DonneLe.V),
 			until: util.parseDate(homework.PourLe.V),
 			toGive: !!homework.avecRendu,
+			color: homework.CouleurFond,
 			files: homework.ListePieceJointe.V.map(f => ({
 				name: f.L,
 				url: file(url, session, f.L, {N: f.N, G: 48})
