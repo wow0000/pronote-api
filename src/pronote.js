@@ -1082,6 +1082,7 @@ async function homeworks(url, session, week) {
 		result.push({
 			subject: homework.Matiere.V.L,
 			content: util.decodeHTML(content),
+			rawContent: content,
 			since: util.parseDate(homework.DonneLe.V),
 			until: util.parseDate(homework.PourLe.V),
 			toGive: !!homework.avecRendu,
