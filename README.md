@@ -1,5 +1,6 @@
 # Pronote library
 
+### Note: Une récente mise à jour de Pronote sorti il y a quelques heures _aurait cassé la library_ Merci d'ouvrir une issue si vous rencontrez ce problème.
 Original api from Litarvan (https://github.com/Litarvan/pronote-api)
 
 ## Installation
@@ -127,5 +128,3 @@ Sinon, l'API propose de se connecter à Pronote avec des comptes des académies 
 - Académie d'Orleans-Tours
 - Académie de Besançon
 - ENT "Île de France"
-
-Encore une fois, cette liste peut être agrandie : n'hésitez pas à me contacter, je fais ça rapidement
