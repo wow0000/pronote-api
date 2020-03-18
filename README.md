@@ -1,6 +1,7 @@
 # Pronote library
 
-### Note: Une récente mise à jour de Pronote sorti il y a quelques heures _aurait cassé la library_ Merci d'ouvrir une issue si vous rencontrez ce problème.
+### Note: This lib was originally ported for a personal project and *no liability is provided* including CAS support.
+
 Original api from Litarvan (https://github.com/Litarvan/pronote-api)
 
 ## Installation
@@ -8,7 +9,7 @@ Original api from Litarvan (https://github.com/Litarvan/pronote-api)
 ```Bash
 npm install pronote-lib
 ```
-## Utilisation fetch & geo
+## Usage fetch & geo
 ```Javascript
 const pronote = require("pronote-lib");
 
@@ -50,9 +51,8 @@ pronote.geo("48.8666", "2.3333").then(function (res) {
 })
 
 ``` 
-La requête fetch renvoie un JSON avec toutes les informations reçues : [**Exemple de sortie de l'application**](https://gist.github.com/Litarvan/ec666fa544f6d036e515867d0f266ca7)
-
-## Utilisation classe
+The fetch request sends a JSON with these informations: [**Exemple de sortie de l'application**](https://gist.github.com/Litarvan/ec666fa544f6d036e515867d0f266ca7)
+## Usage User class
 
 ```Javascript
 const pronote = require("pronote-lib");
