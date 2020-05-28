@@ -589,13 +589,9 @@ class User {
 							title: f.L,
 							description: util.decodeHTML(f.descriptif.V),
 							rawDescription: f.descriptif.V,
-							files: f.ListePieceJointe.V.map(ff => (function (ff) {
-								if (ff !== undefined) {
-									return {
-										name: ff.L,
-										url: file(pointer_this.details.url, ff.L, {N: ff.N, G: 48})
-									}
-								}
+							files: f.ListePieceJointe.V..filter(ff => ff).map(ff => ({
+								name: ff.L,
+								url: file(pointer_this.details.url, session, ff.L, {N: ff.N, G: 48})
 							}))
 						}))
 					})
