@@ -1,6 +1,6 @@
 {
   "name": "pronote-lib",
-  "version": "2.1.4",
+  "version": "2.1.5",
   "description": "Pronote library",
   "main": "index.js",
   "keywords": [
